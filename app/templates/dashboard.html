@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <header>
+        <h1>YourHub</h1>
+        <p style="color: #888;">Manage your tasks simply.</p>
+    </header>
+
+    <form action="{{ url_for('tasks.add_task') }}" method="POST" class="input-group">
+        <input type="text" name="title" placeholder="What needs to be done?" required autocomplete="off">
+        <button type="submit" class="btn-primary">Add Task</button>
+    </form>
+
+    <ul id="task-list">
+        {% for task in tasks %}
+            <li class="task-item {% if task.completed %}completed{% endif %}" data-id="{{ task.id }}">
+
+                <div class="task-info">
+                    <span class="status-icon">
+                        {% if task.completed %}✔{% else %}☐{% endif %}
+                    </span>
+                    <span class="task-title">{{ task.title }}</span>
+                </div>
+
+                <div class="task-actions">
+                    {% if task.completed %}
+                        <form action="{{ url_for('tasks.uncomplete_task', task_id=task.id) }}" method="POST">
+                            <button type="submit" class="btn-icon text-muted" title="Undo">↺</button>
+                        </form>
+                    {% else %}
+                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST">
+                            <button type="submit" class="btn-icon text-success" title="Done">✔</button>
+                        </form>
+                    {% endif %}
+
+                    <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST">
+                        <button type="submit" class="btn-icon text-danger" title="Delete">🗑</button>
+                    </form>
+                </div>
+            </li>
+        {% else %}
+            <div style="text-align: center; margin-top: 2rem; color: #888;">
+                <p>No tasks yet. Enjoy your free time! 🎉</p>
+            </div>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

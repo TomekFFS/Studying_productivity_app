@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourHub 🚀</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="darkmode-menu">
+        <span id="toggle-text">Dark Mode</span>
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+        </label>
+    </div>
+    
+    <header>
+        <h1>YourHub Dashboard</h1>
+        <nav>
+            <a href="/tasks/">Tasks</a> |
+            <s><a href="#" >Notes</a></s> |
+            <s><a href="#">Timer</a></s>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p><small>&copy; 2025-26 Tomasz Falkiewicz Projekt</small></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const list = document.getElementById('task-list');
+
+            // --- PART A: LOAD SAVED ORDER ---
+            // We do this immediately so the user doesn't see a "flicker"
+            const savedOrder = localStorage.getItem('myTaskOrder');
+            if (savedOrder) {
+                const orderArray = JSON.parse(savedOrder);
+                // Sort the HTML elements based on the saved ID array
+                orderArray.forEach(id => {
+                    const item = list.querySelector(`[data-id='${id}']`);
+                    // appendChild moves the element to the bottom, effectively re-sorting it
+                    if (item) list.appendChild(item); 
+                });
+            }
+
+            // --- PART B: ENABLE DRAGGING & SLIDING ---
+            new Sortable(list, {
+                animation: 150, // The smooth sliding animation (ms)
+                ghostClass: 'dragging-visual', // The style class for the placeholder
+                
+                // This prevents the "Done" and "Delete" buttons from interfering with dragging
+                filter: '.task-actions button, .task-actions form', 
+                preventOnFilter: false, // Allows the buttons to still be clicked
+
+                // --- PART C: SAVE NEW ORDER ---
+                onEnd: function (evt) {
+                    // Get the new list of IDs
+                    const order = this.toArray();
+                    // Save to browser memory
+                    localStorage.setItem('myTaskOrder', JSON.stringify(order));
+                    // Optional: Print to console to verify it works
+                    // console.log("New order saved:", order);
+                }
+            });
+        });
+    </script>
+    <script src="../static/script.js"></script>
+</body>
+</html>

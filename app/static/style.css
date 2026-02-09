@@ -1,0 +1,150 @@
+:root {
+    --primary-color: #4a90e2;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --danger-color: #e74c3c;
+    --success-color: #2ecc71;
+    --text-muted: #888;
+    --input-bg: #F7FFF3;
+}
+
+[data-theme="dark"] {
+    /* 1. The Blues: Slightly lighter to "pop" against dark grey */
+    --primary-color: #5b9df2; 
+    
+    /* 2. Backgrounds: "OLED" style hierarchy */
+    --bg-color: #121212;      /* Very dark grey (almost black) for the main page */
+    --card-bg: #1e1e1e;       /* Slightly lighter grey for the task items */
+    
+    /* 3. Text: Off-white reduces eye strain compared to 100% white */
+    --text-color: #e0e0e0;    
+    --text-muted: #a0a0a0;    
+    
+    /* 4. Status Colors: Pastel versions are easier to read in the dark */
+    --danger-color: #ef5350;  /* Softer red */
+    --success-color: #66bb6a; /* Softer green */
+    --input-bg: #B0B0B0;
+}
+
+#darkmode-menu {
+    display: flex;
+    
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    height: 100vh;
+}
+main {
+    align-self: center;
+}
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+footer {
+    position: fixed;
+    right: 20px;
+    bottom: 0;
+}
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 { font-weight: 300; margin-bottom: 0.5rem; }
+nav a { text-decoration: none; color: var(--primary-color); font-weight: bold; }
+
+/* The Add Task Form */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    background: var(--card-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #acabab;
+    border-radius: 4px;
+    outline: none;
+    background-color: var(--input-bg);
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: opacity 0.2s;
+}
+
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { opacity: 0.9; }
+
+/* Task List */
+ul { list-style: none; padding: 0; }
+
+.task-item {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    transition: transform 0.2s;
+    cursor: grab;
+}
+.task-item:active { 
+    cursor: grabbing;
+}
+.dragging-visual {
+    background: #f0f0f0;
+    border: 2px dashed #ccc;
+    opacity: 0.6;
+}
+.task-actions button {
+    cursor: pointer;
+}
+
+.task-info { display: flex; align-items: center; gap: 10px; }
+
+/* Completed State */
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* Action Buttons */
+.task-actions { display: flex; gap: 5px; }
+
+.btn-icon {
+    background: none;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+.btn-icon:hover { background-color: #f0f0f0; border-radius: 50%; }
+.text-success { color: var(--success-color); }
+.text-danger { color: var(--danger-color); }
+.text-muted { color: var(--text-muted); }
