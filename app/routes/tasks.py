@@ -61,3 +61,11 @@ def uncomplete_task(task_id):
     save_tasks(tasks)  # save the tasks altogether
 
     return redirect(url_for("tasks.list_tasks"))
+
+@bp.route("/focus_mode/<task_id>", methods=["GET"])
+def focus_mode(task_id):
+    task = next((t for t in get_tasks() if t["id"] == task_id), None)  # find the task by id
+
+    if not task:
+        return redirect(url_for("tasks.list_tasks"))  # if task not found, redirect to task list
+    return render_template("focus_mode.html", task=task)  # render the focus mode template with the task details

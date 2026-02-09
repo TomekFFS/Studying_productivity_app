@@ -37,6 +37,10 @@
                     <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST">
                         <button type="submit" class="btn-icon text-danger" title="Delete">🗑</button>
                     </form>
+
+                    <a href="{{ url_for('tasks.focus_mode', task_id=task.id) }}" class="btn-icon" style="text-decoration: none; margin-right: 5px;" title="Focus Mode">
+                        🎯
+                    </a>
                 </div>
             </li>
         {% else %}

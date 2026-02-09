@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="focus-container">
+
+    <div class="focus-label">Current Objective</div>
+    <h1 class="focus-task-title">{{ task.title }}</h1>
+
+    <div id="timer-display" class="timer-display">
+        25:00
+    </div>
+
+    <div class="focus-controls">
+        <button id="start-btn" class="btn-primary btn-large">Start Focus</button>
+        <button id="reset-btn" class="btn-circle" title="Reset Timer">↺</button>
+    </div>
+
+    <div>
+        <a href="{{ url_for('tasks.list_tasks') }}" class="focus-back-link">&larr; Back to Dashboard</a>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='timer.js') }}"></script>
+{% endblock %}

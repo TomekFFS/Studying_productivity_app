@@ -37,6 +37,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const list = document.getElementById('task-list');
 
+            if (!list) return; // If there's no task list, skip the rest
             // --- PART A: LOAD SAVED ORDER ---
             // We do this immediately so the user doesn't see a "flicker"
             const savedOrder = localStorage.getItem('myTaskOrder');
@@ -71,6 +72,6 @@
             });
         });
     </script>
-    <script src="../static/script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
