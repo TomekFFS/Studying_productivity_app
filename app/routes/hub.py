@@ -4,9 +4,10 @@ from app.models.task import Task                                            #imp
 from app.storage.sqlite_manager import get_tasks, save_tasks
 
 #defining the blueprint, handles only URLs with prefix /tasks
-bp = Blueprint("tasks", __name__, url_prefix="/tasks")
+# bp = Blueprint("tasks", __name__, url_prefix="/tasks")
+bp = Blueprint("hub", __name__, url_prefix="/hub")
 
-@bp.route("/", methods=["GET"])
+@bp.route("/tasks", methods=["GET"])
 def list_tasks():
     tasks = get_tasks() #getting the data with the method used before in CLI
     return render_template("dashboard.html", tasks=tasks) #render the HTML template and pass the variable 'tasks' to it
@@ -28,7 +29,7 @@ def add_task():
     tasks.append(new_task.to_dict())    #then appending the new one from above
     save_tasks(tasks)                   #and saving them altogether
 
-    return redirect(url_for("tasks.list_tasks"))
+    return redirect(url_for("hub.list_tasks"))
 
 @bp.route("/complete/<task_id>", methods= ["POST"])
 def complete_task(task_id):             #same as in CLI we have similar logic
@@ -39,7 +40,7 @@ def complete_task(task_id):             #same as in CLI we have similar logic
             break
     save_tasks(tasks)                   #save the tasks altogether
 
-    return redirect(url_for("tasks.list_tasks"))
+    return redirect(url_for("hub.list_tasks"))
 
 @bp.route("/delete/<task_id>", methods=["POST"])
 def delete_task(task_id):
@@ -49,7 +50,7 @@ def delete_task(task_id):
 
     save_tasks(tasks)
 
-    return redirect(url_for("tasks.list_tasks"))
+    return redirect(url_for("hub.list_tasks"))
 
 @bp.route("/uncomplete/<task_id>", methods= ["POST"])
 def uncomplete_task(task_id):
@@ -60,12 +61,12 @@ def uncomplete_task(task_id):
             break
     save_tasks(tasks)  # save the tasks altogether
 
-    return redirect(url_for("tasks.list_tasks"))
+    return redirect(url_for("hub.list_tasks"))
 
 @bp.route("/focus_mode/<task_id>", methods=["GET"])
 def focus_mode(task_id):
     task = next((t for t in get_tasks() if t["id"] == task_id), None)  # find the task by id
 
     if not task:
-        return redirect(url_for("tasks.list_tasks"))  # if task not found, redirect to task list
+        return redirect(url_for("hub.list_tasks"))  # if task not found, redirect to task list
     return render_template("focus_mode.html", task=task)  # render the focus mode template with the task details

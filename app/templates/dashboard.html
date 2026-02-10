@@ -7,7 +7,7 @@
         <p style="color: #888;">Manage your tasks simply.</p>
     </header>
 
-    <form action="{{ url_for('tasks.add_task') }}" method="POST" class="input-group">
+    <form action="{{ url_for('hub.add_task') }}" method="POST" class="input-group">
         <input type="text" name="title" placeholder="What needs to be done?" required autocomplete="off">
         <button type="submit" class="btn-primary">Add Task</button>
     </form>
@@ -25,20 +25,20 @@
 
                 <div class="task-actions">
                     {% if task.completed %}
-                        <form action="{{ url_for('tasks.uncomplete_task', task_id=task.id) }}" method="POST">
+                        <form action="{{ url_for('hub.uncomplete_task', task_id=task.id) }}" method="POST">
                             <button type="submit" class="btn-icon text-muted" title="Undo">↺</button>
                         </form>
                     {% else %}
-                        <form action="{{ url_for('tasks.complete_task', task_id=task.id) }}" method="POST">
+                        <form action="{{ url_for('hub.complete_task', task_id=task.id) }}" method="POST">
                             <button type="submit" class="btn-icon text-success" title="Done">✔</button>
                         </form>
                     {% endif %}
 
-                    <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST">
+                    <form action="{{ url_for('hub.delete_task', task_id=task.id) }}" method="POST">
                         <button type="submit" class="btn-icon text-danger" title="Delete">🗑</button>
                     </form>
 
-                    <a href="{{ url_for('tasks.focus_mode', task_id=task.id) }}" class="btn-icon" style="text-decoration: none; margin-right: 5px;" title="Focus Mode">
+                    <a href="{{ url_for('hub.focus_mode', task_id=task.id) }}" class="btn-icon" style="text-decoration: none; margin-right: 5px;" title="Focus Mode">
                         🎯
                     </a>
                 </div>

@@ -1,16 +1,16 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 
 def create_app():
     app= Flask(__name__)
 
     #PLUG IN: tasks feature
-    from app.routes.tasks import bp as tasks_bp
-    app.register_blueprint(tasks_bp)
+    from app.routes.hub import bp as hub_bp
+    app.register_blueprint(hub_bp)
     
     #Place for further scaling (adding new features like a calendar or a timer etc)
 
     @app.route("/")
     def home():
-        return "Twój serwer działa<p>kieruj się do <a href='/tasks/'>/tasks</a> aby zobaczyć swoje zadania do wykonania</p>"
+        return redirect(url_for('hub.list_tasks')) #redirecting to the tasks page
     
     return app
