@@ -23,3 +23,12 @@ function switchTheme(e) {
 
 // 3. Add Listener
 toggleSwitch.addEventListener('change', switchTheme, false);
+
+// Prevent reloading if clicking the link for the current page
+document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        if (this.getAttribute('href') === window.location.pathname) {
+            e.preventDefault(); // Stop the refresh!
+        }
+    });
+});
