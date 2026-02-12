@@ -70,3 +70,8 @@ def focus_mode(task_id):
     if not task:
         return redirect(url_for("hub.list_tasks"))  # if task not found, redirect to task list
     return render_template("focus_mode.html", task=task)  # render the focus mode template with the task details
+
+@bp.route("/focus_setup", methods= ["GET"])
+def focus_setup():
+    tasks = get_tasks()
+    return render_template("focus_setup.html", tasks=tasks)

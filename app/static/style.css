@@ -65,7 +65,7 @@ header {
     margin-bottom: 2rem;
 }
 
-h1 { font-weight: 300; margin-bottom: 0.5rem; }
+h1 { font-weight: 300; margin-bottom: 0.5rem; margin-top: 10px;}
 nav a { text-decoration: none; color: var(--primary-color); font-weight: bold; }
 
 /* The Add Task Form */
