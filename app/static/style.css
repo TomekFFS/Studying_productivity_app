@@ -144,6 +144,100 @@ ul { list-style: none; padding: 0; }
     padding: 5px;
 }
 
+/* --- Split Layout Focus Setup --- */
+
+/* 1. The Container: Holds the two columns */
+.split-view-container {
+    display: flex;
+    width: 100%;
+    /* Subtract header/footer space approx */
+    height: calc(100vh - 150px); 
+    gap: 20px;
+}
+
+/* 2. The Sidebar (Left - 40%) */
+.task-sidebar {
+    flex: 0 0 40%; /* Fixed 40% width */
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 2rem;
+    overflow-y: auto; /* Adds scroll only if list is HUGE */
+    box-shadow: inset -1px 0 0 rgba(0,0,0,0.05); /* Subtle separator line */
+}
+
+.sidebar-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--text-muted);
+    padding-bottom: 10px;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.sidebar-item.completed {
+    color: var(--text-muted);
+}
+
+.status-dot {
+    font-size: 1.2rem;
+    width: 25px;
+    text-align: center;
+}
+
+/* 3. The Main Area (Right - 60%) */
+.focus-setup-area {
+    flex: 1; /* Takes remaining space (60%) */
+    display: flex;
+    align-items: center; /* Vertically center the card */
+    justify-content: center;
+}
+
+.large-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 3rem !important; /* Bigger padding */
+}
+
+/* Bigger Controls */
+.large-select {
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.large-btn {
+    padding: 20px;
+    font-size: 1.3rem;
+    margin-top: 1rem;
+}
+
+/* Mobile Responsiveness: Stack them if screen is too small */
+@media (max-width: 768px) {
+    .split-view-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .task-sidebar, .focus-setup-area {
+        flex: auto;
+        width: 100%;
+    }
+}
+
 /* --- Focus Mode Styles --- */
 .focus-container {
     text-align: center;

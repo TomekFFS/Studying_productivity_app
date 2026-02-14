@@ -1,6 +1,9 @@
+/* TRICK: We check if INITIAL_TIME is defined (from the HTML).
+   If yes, use it. If no (e.g. testing file directly), default to 25.
+*/
+let sessionDuration = (typeof INITIAL_TIME !== 'undefined') ? INITIAL_TIME : 25;
 
-
-let timeLeft = 25 * 60; // 25 minutes
+let timeLeft = sessionDuration * 60; 
 let timerId = null;
 let isRunning = false;
 
@@ -8,9 +11,13 @@ const display = document.getElementById('timer-display');
 const startBtn = document.getElementById('start-btn');
 const resetBtn = document.getElementById('reset-btn');
 
+// Initialize display immediately so user sees "25:00" (or 50:00) right away
+updateDisplay();
+
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
+    // Add leading zeros (e.g., 9 -> 09)
     display.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     document.title = `(${minutes}:${seconds < 10 ? '0' : ''}${seconds}) Focus`;
 }
@@ -20,9 +27,7 @@ function startTimer() {
 
     isRunning = true;
     startBtn.textContent = "Pause";
-    // We can change style via class or direct style.
-    // Let's stick to simple logic here.
-    startBtn.style.backgroundColor = "var(--danger-color)";
+    startBtn.style.backgroundColor = "var(--danger-color)"; // Visual feedback
 
     timerId = setInterval(() => {
         timeLeft--;
@@ -41,16 +46,18 @@ function pauseTimer() {
     clearInterval(timerId);
     isRunning = false;
     startBtn.textContent = "Resume";
-    startBtn.style.backgroundColor = ""; // Reset to default CSS
+    startBtn.style.backgroundColor = ""; // Reset color
 }
 
 function resetTimer() {
     pauseTimer();
-    timeLeft = 25 * 60;
+    // RESET logic: Go back to the original session duration
+    timeLeft = sessionDuration * 60;
     startBtn.textContent = "Start Focus";
     updateDisplay();
 }
 
+// Event Listeners
 startBtn.addEventListener('click', () => {
     if (isRunning) {
         pauseTimer();
@@ -60,6 +67,3 @@ startBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', resetTimer);
-
-// Init
-updateDisplay();

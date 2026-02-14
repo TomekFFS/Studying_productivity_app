@@ -7,7 +7,7 @@
     <h1 class="focus-task-title">{{ task.title }}</h1>
 
     <div id="timer-display" class="timer-display">
-        25:00
+        {{ time }}
     </div>
 
     <div class="focus-controls">
@@ -20,6 +20,10 @@
     </div>
 
 </div>
+
+<script>
+    const INITIAL_TIME = parseInt("{{ time }}"); //just for syntax. The Flask FrWork would pass it 
+</script>
 
 <script src="{{ url_for('static', filename='timer.js') }}"></script>
 {% endblock %}

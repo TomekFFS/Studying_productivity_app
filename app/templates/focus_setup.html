@@ -1,67 +1,81 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container" style="text-align: center; max-width: 500px; margin: 0 auto;">
+<div class="split-view-container">
     
-    <h2>🎯 Focus Session Setup</h2>
-    <p style="color: var(--text-muted);">Choose your target and time.</p>
-
-    <div style="background: var(--card-bg); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-top: 2rem;">
-        
-        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: bold;">Select Task</label>
-        <select id="task-select" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; background: var(--input-bg); color: var(--text-color); margin-bottom: 1.5rem;">
-            <option value="" disabled selected>-- Choose a task --</option>
+    <aside class="task-sidebar">
+        <h3 class="sidebar-title">All Tasks</h3>
+        <ul class="sidebar-list">
             {% for task in tasks %}
-                {% if not task.completed %} <!-- edge case: If task is already completed, it doesn't appear -->
-                    <option value="{{ task.id }}">{{ task.title }}</option>
-                {% endif %}
+                <li class="sidebar-item {% if task.completed %}completed{% endif %}">
+                    <span class="status-dot">
+                        {% if task.completed %}✔{% else %}○{% endif %}
+                    </span>
+                    <span class="task-text">
+                        {% if task.completed %}
+                            <s>{{ task.title }}</s>
+                        {% else %}
+                            {{ task.title }}
+                        {% endif %}
+                    </span>
+                </li>
             {% endfor %}
-        </select>
+        </ul>
+    </aside>
 
-        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-weight: bold;">Session Length</label>
-        <div style="display: flex; gap: 10px; margin-bottom: 2rem;">
-            <button type="button" class="btn-mode selected" data-time="25">🍅 25m</button>
-            <button type="button" class="btn-mode" data-time="50">🧠 50m</button>
-            <button type="button" class="btn-mode" data-time="90">🔥 90m</button>
+    <section class="focus-setup-area">
+        <div class="setup-card large-card">
+            <h2>🎯 Focus Session</h2>
+            <p class="text-muted">Configure your session.</p>
+
+            <label class="setup-label">Select Target</label>
+            <select id="task-select" class="setup-select large-select">
+                <option value="" disabled selected>-- Choose a task --</option>
+                {% for task in tasks %}
+                    {% if not task.completed %}
+                        <option value="{{ task.id }}">{{ task.title }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+            <label class="setup-label">Duration</label>
+            <div class="mode-selector">
+                <button type="button" class="btn-mode selected" id="25" data-time="25">25m</button>
+                <button type="button" class="btn-mode" data-time="50">50m</button>
+                <button type="button" class="btn-mode" data-time="90">90m</button>
+            </div>
+
+            <button id="start-session-btn" class="btn-primary btn-start large-btn">Start Focus</button>
         </div>
-
-        <button id="start-session-btn" class="btn-primary" style="width: 100%; padding: 15px; font-size: 1.1rem;">Start Focus</button>
-    
-    </div>
+    </section>
 
 </div>
 
 <script>
     document.getElementById('start-session-btn').addEventListener('click', function() {
-        // 1. Get the chosen Task ID
         const taskId = document.getElementById('task-select').value;
         
-        // 2. Validation: Did they actually pick one?
+        const selectedBtn = document.querySelector('.btn-mode.selected');
+        const time = selectedBtn ? selectedBtn.dataset.time : 25; //if the user doesn't click any of the options the default is 25
         if (!taskId) {
             alert("Please select a task first!");
             return;
         }
-
-        // 3. Redirect to the timer page
-        // We use JavaScript to build the URL: /study_hub/focus_mode/{id}
-        window.location.href = "{{ url_for('hub.focus_mode', task_id='') }}" + taskId;
+        window.location.href = "{{ url_for('hub.focus_mode', task_id='') }}" + taskId + `?time=${time}`;
     });
-</script>
 
+    // Simple interaction for time buttons
+    document.querySelectorAll('.btn-mode').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+    document.getElementsByClassName('btn-mode selected')
+</script>
 <style>
-    .btn-mode {
-        flex: 1;
-        padding: 10px;
-        border: 1px solid var(--text-muted);
-        background: transparent;
-        border-radius: 6px;
-        cursor: pointer;
-        color: var(--text-color);
-    }
-    .btn-mode.selected { /* Style for the active button */
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
+    .btn-mode.selected {
+        background-color: rgb(69, 117, 189);
     }
 </style>
 {% endblock %}

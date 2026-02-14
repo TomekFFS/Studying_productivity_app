@@ -1,5 +1,5 @@
 # from flask import Blueprint, jsonify
-from flask import Blueprint, render_template, request, redirect, url_for    #changed jsonify to render_template
+from flask import Blueprint, render_template, request, redirect, url_for, request
 from app.models.task import Task                                            #importing the Task object
 from app.storage.sqlite_manager import get_tasks, save_tasks
 
@@ -66,10 +66,10 @@ def uncomplete_task(task_id):
 @bp.route("/focus_mode/<task_id>", methods=["GET"])
 def focus_mode(task_id):
     task = next((t for t in get_tasks() if t["id"] == task_id), None)  # find the task by id
-
+    time = request.args.get('time', default= 25, type= int)
     if not task:
         return redirect(url_for("hub.list_tasks"))  # if task not found, redirect to task list
-    return render_template("focus_mode.html", task=task)  # render the focus mode template with the task details
+    return render_template("focus_mode.html", task=task, time=time)  # render the focus mode template with the task details
 
 @bp.route("/focus_setup", methods= ["GET"])
 def focus_setup():
