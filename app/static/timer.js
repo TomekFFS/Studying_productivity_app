@@ -3,6 +3,7 @@
 */
 let sessionDuration = (typeof INITIAL_TIME !== 'undefined') ? INITIAL_TIME : 25;
 
+let mode = true //True = focus mode | False = break time
 let timeLeft = sessionDuration * 60; 
 let timerId = null;
 let isRunning = false;
@@ -22,6 +23,16 @@ function updateDisplay() {
     document.title = `(${minutes}:${seconds < 10 ? '0' : ''}${seconds}) Focus`;
 }
 
+function breakTimer() {
+    alert("Focus session complete! Take a break. ☕");
+
+    timeLeft = sessionDuration / 5 * 60;
+    timerId = setInterval(() => {
+        timeLeft--;
+        updateDisplay()
+    }, 1000)
+}
+
 function startTimer() {
     if (isRunning) return;
 
@@ -34,10 +45,7 @@ function startTimer() {
         updateDisplay();
 
         if (timeLeft <= 0) {
-            clearInterval(timerId);
-            isRunning = false;
-            startBtn.textContent = "Finished!";
-            alert("Focus session complete! Take a break. ☕");
+            
         }
     }, 1000);
 }
