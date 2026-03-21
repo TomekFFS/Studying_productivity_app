@@ -1,0 +1,7 @@
+services:
+  productivity-app:
+    build: .
+    ports:
+      - "5100:5000"
+    volumes:
+      - ~/Documents/productivity_data:/app/data

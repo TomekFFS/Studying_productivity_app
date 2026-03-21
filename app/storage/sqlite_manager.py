@@ -1,7 +1,13 @@
-import json                                 #used for human-readable storage
-from pathlib import Path                    #works on both Linux / Windows safely
-BASE_DIR = Path(__file__).resolve().parent  #folder containing sqlite_manager.py
-DATA_FILE = BASE_DIR / "data.json"          #app/storage/data.json
+import json                                 
+from pathlib import Path                    
+
+# Point directly to the new safe data folder mapped by Docker
+DATA_DIR = Path("/app/data")
+
+# Safety check: ensure the directory actually exists before trying to write to it
+DATA_DIR.mkdir(parents=True, exist_ok=True) 
+
+DATA_FILE = DATA_DIR / "data.json"          
 
 def _ensure_data_file(): #ensures data exists
     if not DATA_FILE.exists():  
