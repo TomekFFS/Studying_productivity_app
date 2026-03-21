@@ -14,7 +14,7 @@
 
     <ul id="task-list">
         {% for task in tasks %}
-            <li class="task-item {% if task.completed %}completed{% endif %}" data-id="{{ task.id }}">
+            <li class="task-item {% if task.completed %}completed{% endif %}" data-id="{{ task.id }}" draggable="true">
 
                 <div class="task-info">
                     <span class="status-icon">
@@ -50,4 +50,51 @@
         {% endfor %}
     </ul>
 </div>
+
+<script>
+    const taskList = document.getElementById('task-list');
+
+    let dragged = null;
+
+    taskList.addEventListener('dragstart', (event) => {
+        dragged = event.target;
+        event.target.style.opacity = 0.4;
+    });
+
+    taskList.addEventListener('dragend', (event) => {
+        event.target.style.opacity = '';
+    });
+
+    taskList.addEventListener('dragover', (event) => {
+        event.preventDefault();
+    });
+
+    taskList.addEventListener('drop', (event) => {
+        event.preventDefault();
+        if (event.target.classList.contains('task-item') || event.target.closest('.task-item')) {
+            const target = event.target.closest('.task-item');
+            if (dragged && target && dragged !== target) {
+                const rect = target.getBoundingClientRect();
+                const next = (event.clientY - rect.top) / rect.height > 0.5;
+                taskList.insertBefore(dragged, next ? target.nextSibling : target);
+                sendOrderUpdate();
+            }
+        }
+    });
+
+    function sendOrderUpdate() {
+        const order = Array.from(taskList.children).map((el) => el.dataset.id);
+        fetch('{{ url_for("hub.reorder_tasks") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order }),
+        }).then((response) => {
+            if (!response.ok) {
+                console.error('Reorder failed', response.status);
+            }
+        }).catch((err) => {
+            console.error('Reorder sync error', err);
+        });
+    }
+</script>
 {% endblock %}

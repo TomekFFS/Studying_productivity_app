@@ -4,18 +4,19 @@ import uuid #generates unique IDs (for later deleting/editing tasks)
 
 @dataclass #this class mainly stores data
 class Task:
-    id: str
+    id: int
     title: str
     created_at: str
-    completed: bool=False
+    completed: bool = False
 
     @staticmethod
-    def create(title: str) -> "Task":
+    def create(title: str, id: int) -> "Task":
         return Task(
-            id=str(uuid.uuid4()),
+            id=id,
             title=title,
             created_at=datetime.utcnow().isoformat(),
             completed=False
         )
+
     def to_dict(self):
         return asdict(self)

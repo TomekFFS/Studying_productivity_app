@@ -20,7 +20,7 @@ function updateDisplay() {
     const seconds = timeLeft % 60;
     // Add leading zeros (e.g., 9 -> 09)
     display.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    document.title = `(${minutes}:${seconds < 10 ? '0' : ''}${seconds}) Focus`;
+    document.title = `(${minutes}:${seconds < 10 ? '0' : ''}${seconds}) ${mode ? 'Focus' : 'Break'}`;
 }
 
 function breakTimer() {
@@ -45,7 +45,31 @@ function startTimer() {
         updateDisplay();
 
         if (timeLeft <= 0) {
-            
+            if (mode) {
+                // Switch to break mode
+                clearInterval(timerId);
+                mode = false;
+                timeLeft = Math.floor(sessionDuration / 5) * 60; // 5-minute break
+                updateDisplay();
+                alert("Focus session complete! Take a break. ☕");
+                // Start break timer
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        // Break over, reset to focus and continue cycle
+                        clearInterval(timerId);
+                        isRunning = false;
+                        startBtn.textContent = "Start Focus";
+                        mode = true;
+                        timeLeft = sessionDuration * 60;
+                        updateDisplay();
+                        alert("Break time over! Back to focus. 📚");
+                        // Automatically start next focus session
+                        startTimer();
+                    }
+                }, 1000);
+            }
         }
     }, 1000);
 }
@@ -60,6 +84,7 @@ function pauseTimer() {
 function resetTimer() {
     pauseTimer();
     // RESET logic: Go back to the original session duration
+    mode = true;
     timeLeft = sessionDuration * 60;
     startBtn.textContent = "Start Focus";
     updateDisplay();
